@@ -1,0 +1,20 @@
+{
+  "name": "hellbot",
+  "version": "1.0.0",
+  "description": "Discord bot to receive updates about Helldivers 2 war effort",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Florian \"Voltyk\" Malfroid",
+  "license": "ISC",
+  "dependencies": {
+    "data-store": "^4.0.3",
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.5"
+  },
+  "imports": {
+    "#commands/*": "./commands/*"
+  },
+  "type": "module"
+}
