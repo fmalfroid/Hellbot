@@ -79,9 +79,13 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.on('ready', () => {
 	console.log("Hellbot is ready.");
-	setInterval(() => {
-		sendNewsFeed(client);
-	}, 1200000)
 })
 
 client.login(token);
+
+async function newsFeed() {setInterval(() => {
+	console.log("Send news feed");
+	sendNewsFeed(client);
+}, 1200000)}
+
+newsFeed();
