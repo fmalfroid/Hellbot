@@ -1,8 +1,7 @@
 import { SlashCommandBuilder } from 'discord.js';
-import { Store } from 'data-store';
-const store = new Store({
-	path: process.cwd() + '/data.json'
-});
+import { JsonDB, Config } from 'node-json-db';
+
+var db = new JsonDB(new Config("data", true, true, '/'));
 
 export const command = {
     cooldown: 5,
@@ -12,8 +11,7 @@ export const command = {
 	async execute(interaction) {
         const server = interaction.guild.id;
         const channel = interaction.channel.id;
-        store.set('servers_channels.' + server, channel)
-        store.save()
+        db.push('/servers_channels/' + server, channel)
 		await interaction.reply({ content: `News feed set to ${server} : ${channel}.`, ephemeral: true });
 	},
 };

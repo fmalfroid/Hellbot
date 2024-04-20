@@ -1,6 +1,6 @@
 import * as helldiversAPI from '../helldiver-2-API/api.js';
 import { AttachmentBuilder, EmbedBuilder } from 'discord.js';
-import { Store } from 'data-store';
+import { JsonDB, Config } from 'node-json-db';
 
 const logo_fileName = 'super-earth.png';
 const democracy_fileName = 'democracy.gif';
@@ -9,11 +9,7 @@ const democracy_attachement = 'attachment://' + democracy_fileName;
 const logo = new AttachmentBuilder('./resources/' + logo_fileName);
 const democracy = new AttachmentBuilder('./resources/' + democracy_fileName);
 
-const store = new Store({
-	path: process.cwd() + '/data.json'
-});
-
-var last_news_sent = store.get("last_news_id");
+var db = new JsonDB(new Config("data", true, true, '/'));
 
 function createEmbedForNewMajorOrder(news) {
 	return new EmbedBuilder()
@@ -74,7 +70,8 @@ function getFiles(news) {
 
 }
 
-function sendNewsFeed(client) {
+async function sendNewsFeed(client) {
+    var last_news_sent = await db.getData("/last_news_id");
 	helldiversAPI.getNewsFeed().then(newsFeed => {
 		[...newsFeed.keys()].filter(key => key > last_news_sent).forEach(key => {
 			var news = newsFeed.get(key)["message"]
@@ -89,10 +86,10 @@ function sendNewsFeed(client) {
                     }
                 }
 
-                client.guilds.cache.forEach(guild => {
+                client.guilds.cache.forEach(async guild => {
                     const id = guild.id;
-                    if (store.has('servers_channels.' + id)) {
-                        const channel_id = store.get('servers_channels.' + id);
+                    if (db.exists('/servers_channels.' + id)) {
+                        const channel_id = await db.getData('/servers_channels/' + id);
                         const channelToSend = client.channels.cache.find(channel => channel.id === channel_id);
                         if (!(channelToSend === undefined)) {
                             channelToSend.send({ embeds: [NewsFeedEmbedFactory(news)], files: getFiles(news) })
@@ -100,8 +97,7 @@ function sendNewsFeed(client) {
                     }
                 })
                 last_news_sent = key;
-                store.set("last_news_id", last_news_sent);
-                store.save();
+                db.push("/last_news_id", last_news_sent);
             }
 		})
 	});
