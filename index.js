@@ -86,6 +86,6 @@ client.login(token);
 async function newsFeed() {setInterval(() => {
 	console.log("Send news feed");
 	sendNewsFeed(client);
-}, 1200000)}
+}, 600000)}
 
 newsFeed();
