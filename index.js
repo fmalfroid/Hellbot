@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
 import * as dotenv from 'dotenv';
-import { sendNewsFeed } from './utilities/hellbot-utility.js'
+import * as hellbot from './utilities/hellbot-utility.js'
 
 dotenv.config();
 const clientId = process.env.APP_ID;
@@ -13,8 +13,8 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 client.cooldowns = new Collection();
 
+// Setting commands
 const commandFolders = fs.readdirSync('./commands');
-
 for (const folder of commandFolders) {
 	const commandFiles = fs.readdirSync(`commands/${folder}`).filter(file => file.endsWith('.js'));
 	for (const file of commandFiles) {
@@ -29,10 +29,13 @@ for (const folder of commandFolders) {
 	}
 }
 
+// Actions to do on login
 client.once(Events.ClientReady, readyClient => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+	hellbot.sendNewsFeed(client);
 });
 
+// Actions to do interactions
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 	const command = client.commands.get(interaction.commandName);
@@ -42,6 +45,7 @@ client.on(Events.InteractionCreate, async interaction => {
 		return;
 	}
 
+	// Cooldowns
 	const { cooldowns } = interaction.client;
 
 	if (!cooldowns.has(command.data.name)) {
@@ -65,6 +69,7 @@ client.on(Events.InteractionCreate, async interaction => {
 	timestamps.set(interaction.user.id, now);
 	setTimeout(() => timestamps.delete(interaction.user.id), cooldownAmount);
 
+	// Execute command
 	try {
 		await command.execute(interaction);
 	} catch (error) {
@@ -77,15 +82,13 @@ client.on(Events.InteractionCreate, async interaction => {
 	}
 });
 
+
 client.on('ready', () => {
 	console.log("Hellbot is ready.");
+	setInterval(() => {
+		console.log("Sending news feed");
+		hellbot.sendNewsFeed(client);
+	}, 1800000)
 })
 
 client.login(token);
-
-async function newsFeed() {setInterval(() => {
-	console.log("Send news feed");
-	sendNewsFeed(client);
-}, 600000)}
-
-newsFeed();

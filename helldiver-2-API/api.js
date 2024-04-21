@@ -2,15 +2,40 @@ import * as dotenv from 'dotenv';
 import { Collection } from 'discord.js';
 
 dotenv.config();
-const url = process.env.ARROW_HEAD_API;
+const arrowHeadApiUrl = process.env.ARROW_HEAD_API;
 
+/**
+ * Fetch JSON data from url
+ * 
+ * @param String url 
+ * @returns JSON
+ */
 const getJSON = async url => {
     const response = await fetch(url);
-    return response.json(); // get JSON from the response 
+    return response.json();
 }
 
-const getNewsFeed = () => {
-    return getJSON(url + '/api/NewsFeed/801?maxEntries=1024')
+/**
+ * Get the id of the current war from the ArrowHead API
+ * 
+ * @returns int WarID
+ */
+async function getWarId() {
+    return getJSON(arrowHeadApiUrl + '/api/WarSeason/current/WarID')
+        .then(data => {
+            const WarID = data['id'];
+            return WarID;
+        });
+}
+
+/**
+ * Get The news feed of the current war from the ArrowHead API
+ * 
+ * @returns Map<int, News> NewsFeed
+ */
+export async function getNewsFeed() {
+    const warId = await getWarId()
+    return getJSON(arrowHeadApiUrl + `/api/NewsFeed/${warId}?maxEntries=1024`)
         .then(data => {
             const newsFeed = new Collection();
             for (var key in data) {
@@ -20,4 +45,21 @@ const getNewsFeed = () => {
         });
 };
 
-export { getNewsFeed }
+/**
+ * Get The current Major Order from the ArrowHead API
+ * 
+ * @returns 
+ */
+export async function getAssignement() {
+    const warId = await getWarId()
+    return getJSON(arrowHeadApiUrl + '/api/v2/Assignment/War/' + warId)
+        .then(data => {
+            const assignement = {
+                title: data [0]['setting']['overrideTitle'],
+                brief: data [0]['setting']['overrideBrief'],
+                description: data [0]['setting']['taskDescription'],
+                reward: data [0]['setting']['reward']['amount']
+            }
+            return assignement;
+        });
+};
