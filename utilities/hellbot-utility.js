@@ -140,8 +140,10 @@ export async function sendNewsFeed(client) {
     var last_news_sent = await db.getData("/last_news_id");
 	helldiversAPI.getNewsFeed().then(newsFeed => {
 		[...newsFeed.keys()].filter(key => key > last_news_sent).forEach(key => {
-			var news = newsFeed.get(key)["message"]
+			var news = newsFeed.get(key)["message"];
             if (!(news === undefined)) {
+                news = news.replace("</i=3>", "<i=3>");
+                news = news.replace("</i=1>", "<i=1>");
                 while (news.includes("<i=3>") || news.includes("<i=1>")) {
                     var indexOf3 = news.indexOf("<i=3>");
                     var indexOf1 = news.indexOf("<i=1>");

@@ -25,6 +25,8 @@ async function getWarId() {
         .then(data => {
             const WarID = data['id'];
             return WarID;
+        }).catch((error) => {
+            return 801;
         });
 }
 
@@ -42,6 +44,8 @@ export async function getNewsFeed() {
                 newsFeed.set(data[key]['id'], data[key]);
             }
             return newsFeed
+        }).catch((error) => {
+            return new Collection();
         });
 };
 
@@ -61,5 +65,13 @@ export async function getAssignement() {
                 reward: data [0]['setting']['reward']['amount']
             }
             return assignement;
+        }).catch((error) => {
+            const assignement = {
+                title: "",
+                brief: "",
+                description: "",
+                reward: 0
+            }
+            return new Collection();
         });
 };
