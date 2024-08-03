@@ -51,7 +51,7 @@ function createEmbedForAssignement(assignement, image) {
 		.setDescription(assignement.brief)
         .setThumbnail(logo)
         .addFields(
-            {name: 'Objective', value: assignement.description}
+            {name: 'Objective', value: assignement.description.length >= 1 ? assignement.description.length : " "}
         )
         .setImage(image)
 		.setTimestamp()

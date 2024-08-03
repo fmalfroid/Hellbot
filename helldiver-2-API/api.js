@@ -59,10 +59,10 @@ export async function getAssignement() {
     return getJSON(arrowHeadApiUrl + '/api/v2/Assignment/War/' + warId)
         .then(data => {
             const assignement = {
-                title: data [0]['setting']['overrideTitle'],
-                brief: data [0]['setting']['overrideBrief'],
-                description: data [0]['setting']['taskDescription'],
-                reward: data [0]['setting']['reward']['amount']
+                title: data[0]['setting']['overrideTitle'],
+                brief: data[0]['setting']['overrideBrief'],
+                description: data[0]['setting']['taskDescription'],
+                reward: data[0]['setting']['reward']['amount']
             }
             return assignement;
         }).catch((error) => {
