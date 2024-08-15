@@ -68,7 +68,7 @@ function NewsFeedEmbedFactory(news) {
         return createEmbedForNews(news, yellow, null);
     } else if (news.includes("MAJOR ORDER WON")) {
         return createEmbedForNews(news, green, democracy);
-    } else if (news.includes("MAJOR ORDER LOST")) {
+    } else if (news.includes("MAJOR ORDER LOST") || news.includes("MAJOR ORDER FAILED")) {
         return createEmbedForNews(news, red, null);
     } else {
         return createEmbedForNews(news, blue, null);
