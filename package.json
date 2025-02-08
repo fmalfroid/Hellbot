@@ -4,7 +4,8 @@
   "description": "Discord bot to receive updates about Helldivers 2 war effort",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "Florian 'Voltyk' Malfroid",
   "license": "ISC",
