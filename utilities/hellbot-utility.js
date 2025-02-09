@@ -8,7 +8,6 @@ import * as path from 'path'
 // Images
 const logo = 'https://cdn.discordapp.com/attachments/1229883616704856086/1231525298344820806/super-earth.png?ex=6637464f&is=6624d14f&hm=351da5285adeb4877c72b284d3c57a48464c4e371f88116861d16f127a1da979&';
 const democracy = 'https://cdn.discordapp.com/attachments/1229883616704856086/1231226366981312602/democracy.gif?ex=66362fe8&is=6623bae8&hm=ed637d7e9e79e49fe58e68618e5ecbcd979dc56a02c968709118a5a11e3e27e0&';
-const medals = 'https://cdn.discordapp.com/attachments/1229883616704856086/1231526300401795092/medals.png?ex=6637473e&is=6624d23e&hm=ed187fead9038aec93d4ddac178c3e1d8c120bd34d7cd9ee11f8b0664773511e&';
 const medals_fileName = "./resources/medals.png";
 
 // Colors
@@ -153,7 +152,7 @@ export async function sendNewsFeed(client) {
                         news = news.replace("<i=1>", "**").replace("</i>", "**");
                     }
                 }
-
+                console.log(`News ${last_news_sent}: ${news}`)
                 client.guilds.cache.forEach(async guild => {
                     const id = guild.id;
                     if (db.exists('/servers_channels.' + id)) {

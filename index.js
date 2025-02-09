@@ -4,9 +4,7 @@ import * as dotenv from 'dotenv';
 import * as hellbot from './utilities/hellbot-utility.js'
 
 dotenv.config();
-const clientId = process.env.APP_ID;
 const token = process.env.DISCORD_TOKEN;
-const publicKey = process.env.PUBLIC_KEY;
 
 // Create a new client instance
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
