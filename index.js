@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { Client, Collection, Events, GatewayIntentBits } from 'discord.js';
 import * as dotenv from 'dotenv';
 import * as hellbot from './utilities/hellbot-utility.js'
+import express from 'express'
 
 dotenv.config();
 const token = process.env.DISCORD_TOKEN;
@@ -10,6 +11,10 @@ const token = process.env.DISCORD_TOKEN;
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 client.cooldowns = new Collection();
+
+//express
+const app = express()
+const port = 3000
 
 // Setting commands
 const commandFolders = fs.readdirSync('./commands');
@@ -90,3 +95,11 @@ client.on('ready', () => {
 })
 
 client.login(token);
+
+app.get('/', (req, res) => {
+	res.send('Hello World!')
+})
+  
+app.listen(port, () => {
+	console.log(`Example app listening on port ${port}`)
+})
